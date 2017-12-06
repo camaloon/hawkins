@@ -30,7 +30,13 @@
               <code>{{::example.url}}</code>
             </div>
 
-            <div class="item item-body"><a target="_blank" ng-href="{{githubFileUrl(example.location)}}"><code>{{::example.location}}</code></a></div>
+            <div class="item item-body">
+              <span><code>{{relativeExampleLocation(example.location)}}</code></span>
+              |
+              <code><a href="#" ng-click="copyLocation(example)">Copy</a></code>
+              |
+              <a target="_blank" ng-href="{{githubFileUrl(example.location)}}"><code>See in github</code></a>
+            </div>
           </div>
         </ion-content>
       </ion-nav-view>
