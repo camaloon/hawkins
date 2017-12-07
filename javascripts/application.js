@@ -1,4 +1,4 @@
-angular.module("hawkins", ["ionic", "firebase", "chart.js"])
+angular.module("hawkins", ["ionic", "firebase", "chart.js", "angular-clipboard"])
 
   .constant("root", new Firebase("https://hawkins-camaloon.firebaseio.com"))
 
@@ -61,7 +61,7 @@ angular.module("hawkins", ["ionic", "firebase", "chart.js"])
       .state("show", {
         url: "/builds/:id",
         templateUrl: "/templates/builds/show.html",
-        controller: function($scope, $firebase, root, $state, $stateParams, $interval, $ionicModal, $document) {
+        controller: function($scope, $firebase, root, $state, $stateParams, $interval, $ionicModal, $document, clipboard) {
           $scope.build = $firebase(root.child("builds").child($stateParams.id)).$asObject();
           $scope.log = $firebase(root.child("logs").child($stateParams.id)).$asArray();
           $scope.examples = $firebase(root.child("examples").child($stateParams.id)).$asArray();
@@ -86,6 +86,14 @@ angular.module("hawkins", ["ionic", "firebase", "chart.js"])
 
           $scope.githubFileUrl = function(location) {
             return ["https://github.com", $scope.build.push.repository.full_name, "blob", $scope.build.push.head_commit.id, location.replace(/^\.\//, "").replace(/:(\d+)/, "#L$1")].join("/")
+          };
+
+          $scope.relativeExampleLocation = function(location) {
+            return location.substring(2)
+          };
+
+          $scope.copyLocation = function(example) {
+            clipboard.copyText(example.location.substring(2));
           };
 
           $scope.showCapture = function(example) {
